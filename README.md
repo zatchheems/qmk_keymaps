@@ -11,7 +11,7 @@ flashed via [QMK CLI](https://github.com/qmk/qmk_cli).
 - [XD60](xd60)
 - [Lily58](lily58)
 - [Tofu68](kbd67)
-- [WhiteFox](whitefox) \_(categorized under `input_club/whitefox`) in
+- [WhiteFox](whitefox) _(categorized under `input_club/whitefox`)_ in
   [QMK firmware repo](https://github.com/qmk/qmk_firmware/tree/master/keyboards/input_club/whitefox)
 
 This is an incomplete, and, just like with keyboards, is an ever-growing list.
