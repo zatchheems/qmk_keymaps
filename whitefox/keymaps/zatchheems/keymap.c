@@ -9,7 +9,9 @@ typedef enum {
   TD_SINGLE_TAP,
   TD_SINGLE_HOLD,
   TD_DOUBLE_TAP,
-  TD_DOUBLE_HOLD
+  TD_DOUBLE_HOLD,
+  TD_TRIPLE_TAP,
+  TD_TRIPLE_HOLD
 } td_state_t;
 
 typedef struct {
@@ -26,10 +28,10 @@ void led_update_ports(led_t led_state) {
   writePin(B1, !led_state.caps_lock);
 }
 
-bool led_update_user(led_t led_state) {
-  led_state.caps_lock ? (uint16_t)register_code(BL_ON) : (uint16_t)register_code(BL_OFF);
-  return true;
-}
+/* bool led_update_user(led_t led_state) { */
+/*   led_state.caps_lock ? (uint16_t)register_code(BL_ON) : (uint16_t)register_code(BL_OFF); */
+/*   return true; */
+/* } */
 
 // Function associated with all tap dances
 td_state_t cur_dance(qk_tap_dance_state_t *state);
@@ -71,6 +73,9 @@ td_state_t cur_dance(qk_tap_dance_state_t *state) {
   } else if (state->count == 2) {
     if (state->interrupted) return TD_DOUBLE_TAP;
     else if (state->pressed) return TD_DOUBLE_HOLD;
+  } else if (state->count == 3) {
+    if (state->interrupted) return TD_TRIPLE_TAP;
+    else if (state->pressed) return TD_TRIPLE_HOLD;
   }
   return TD_UNKNOWN;
 }
@@ -95,6 +100,10 @@ void ql_finished(qk_tap_dance_state_t *state, void *user_data) {
               // If already set, then switch it off
               layer_off(1);
             }
+            // Send RGUI
+            register_code(KC_RGUI);
+            break;
+        case TD_TRIPLE_HOLD:
             // Send RGUI and RALT
             register_code(KC_RGUI);
             register_code(KC_RALT);
@@ -111,6 +120,9 @@ void ql_reset(qk_tap_dance_state_t *state, void *user_data) {
         layer_off(1);
         break;
       case TD_DOUBLE_HOLD:
+        unregister_code(KC_RGUI);
+        break;
+      case TD_TRIPLE_HOLD:
         unregister_code(KC_RGUI);
         unregister_code(KC_RALT);
         break;
